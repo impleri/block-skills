@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.impleri.blockskills.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinBlock",
+    "MixinServerPlayer",
+    "chunk.MixinChunkMap",
+    "chunk.MixinHashMapPalette",
+    "chunk.MixinLinearPalette",
+    "chunk.MixinSingleValuePalette",
+    "network.MixinClientboundBlockUpdatePacket",
+    "network.MixinClientboundSectionBlocksUpdatePacket"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

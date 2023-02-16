@@ -24,7 +24,7 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
     modApi "dev.latvian.mods:kubejs-fabric:${rootProject.kubejs_version}"
-    modApi "net.impleri:player-skills-fabric:${rootProject.playerskills_version}"
+    modApi "net.impleri:player-skills-${rootProject.minecraft_version}-fabric:${rootProject.playerskills_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
