@@ -13,12 +13,6 @@ in cascading progress: when the player starts, the block is replaced with someth
 the player can then see and use the block (e.g. a bed) but cannot break it. Even later after meeting additional
 criteria, the player can finally break the bed as well.
 
-### Helper Utility
-
-We provide a `BlockStateRegistry` utility object for looking up block states using the following methods:
-
-- `for(blockName)`: Returns all block states for the given block ResourceLocation
-
 ### Register
 
 We use the `BlockSkillEvents.register` ***startup*** event to register block restrictions. Registration requires a
@@ -31,21 +25,22 @@ meets that condition. By default, no restrictions are set, so be sure to set act
 
 #### Replacement methods
 
-- `replaceWith`: ResourceLocation/string referencing a block. The replacement block's default block state will be used
-- `replaceWithState`: BlockState ID that will replace the block (See `BlockStateRegistry.for()` above)
+- `replaceWithBlock`: ResourceLocation/string referencing a block. The replacement block's default block state will be
+  used
+- `replaceWithAir`: Replaces the block with air (it's completely hidden!)
 
 #### Allow Restriction Methods
 
 - `nothing`: shorthand to apply all "allow" restrictions
 - `breakable`: the block is breakable and players can break the block using the appropriate tools (if any)
-- `droppable`: the block can be dropped as an item when broken if using the appropriate tool (if any)
+- `harvestable`: the block can be harvested as an item when broken if using the appropriate tool (if any)
 - `usable`: the block can be used (if applicable), e.g. right clicking a crafting table will open the crafting menu
 
 #### Deny Restriction Methods
 
 - `everything`: shorthand to apply the below "deny" abilities
 - `unbreakable`: the block cannot be broken even with the appropriate tool
-- `undroppable`: the block will not be dropped as an item when broken even if using the appropriate tool
+- `unharvestable`: the block will not be dropped as an item when broken even if using the appropriate tool
 - `unusable`: the block cannot be used (if applicable)
 
 ### Examples
