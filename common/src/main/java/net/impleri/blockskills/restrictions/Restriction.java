@@ -10,20 +10,20 @@ import java.util.function.Predicate;
 
 public class Restriction extends AbstractRestriction<BlockState> {
     public final boolean breakable;
-    public final boolean droppable;
+    public final boolean harvestable;
     public final boolean usable;
 
     public Restriction(
             BlockState target,
             @Nullable Predicate<Player> condition,
             @Nullable Boolean breakable,
-            @Nullable Boolean droppable,
+            @Nullable Boolean harvestable,
             @Nullable Boolean usable,
             @NotNull BlockState replacement
     ) {
         super(target, condition, replacement);
         this.breakable = Boolean.TRUE.equals(breakable);
-        this.droppable = Boolean.TRUE.equals(droppable);
+        this.harvestable = Boolean.TRUE.equals(harvestable);
         this.usable = Boolean.TRUE.equals(usable);
     }
 
@@ -31,10 +31,10 @@ public class Restriction extends AbstractRestriction<BlockState> {
             BlockState block,
             @Nullable Predicate<Player> condition,
             @Nullable Boolean breakable,
-            @Nullable Boolean droppable,
+            @Nullable Boolean harvestable,
             @NotNull BlockState replacement
     ) {
-        this(block, condition, breakable, droppable, null, replacement);
+        this(block, condition, breakable, harvestable, null, replacement);
     }
 
     public Restriction(

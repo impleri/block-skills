@@ -23,35 +23,38 @@ public class BlockEvents {
     }
 
     private EventResult beforeMineBlock(Player player, InteractionHand hand, BlockPos pos, Direction face) {
+        BlockSkills.LOGGER.info("Call to arch:leftClickBlock");
         var block = BlockHelper.getBlockState(pos, player.getLevel());
         var blockName = BlockHelper.getBlockName(block);
 
-        BlockSkills.LOGGER.debug("{} is about to mine block {}", player.getName().getString(), blockName);
-
-        if (!Restrictions.INSTANCE.isBreakable(player, block)) {
+        if (!BlockHelper.isBreakable(player, block)) {
+            BlockSkills.LOGGER.info("{} cannot break {}", player.getName().getString(), blockName);
             return EventResult.interruptFalse();
         }
+
+        BlockSkills.LOGGER.info("{} is about to mine block {}", player.getName().getString(), blockName);
 
         return EventResult.pass();
     }
 
     private EventResult beforeUseItemBlock(Player player, InteractionHand hand, BlockPos pos, Direction face) {
+        BlockSkills.LOGGER.info("Call to arch:rightClickBlock");
         var block = BlockHelper.getBlockState(pos, player.getLevel());
         var blockName = BlockHelper.getBlockName(block);
 
-        if (!Restrictions.INSTANCE.isUsable(player, block)) {
-            BlockSkills.LOGGER.debug("{} cannot interact with block {}", player.getName().getString(), blockName);
+        if (!BlockHelper.isUsable(player, block)) {
+            BlockSkills.LOGGER.info("{} cannot interact with block {}", player.getName().getString(), blockName);
             return EventResult.interruptFalse();
         }
 
-        BlockSkills.LOGGER.debug("{} is about to interact with block {}", player.getName().getString(), blockName);
+        BlockSkills.LOGGER.info("{} is about to interact with block {}", player.getName().getString(), blockName);
         return EventResult.pass();
     }
 
     private final HashMap<Player, Long> playerMap = new HashMap<>();
 
     private void onJoin(ServerPlayer player) {
-        playerMap.put(player, Restrictions.getReplacementsCountFor(player));
+        playerMap.put(player, BlockHelper.getReplacementsCountFor(player));
     }
 
     private void onQuit(ServerPlayer player) {
@@ -64,19 +67,19 @@ public class BlockEvents {
 
         // We *should* always have a matching ServerPlayer in playerMap, but this handles the odd case where we don't
         var originalCount = (playerOption.isEmpty()) ? 0 : playerMap.get(playerOption.get());
-        var newCount = Restrictions.getReplacementsCountFor(event.getPlayer());
+        var newCount = BlockHelper.getReplacementsCountFor(event.getPlayer());
 
         // We're assuming that the number of replaced blocks should change if a skill change actually changes replacements
         // If we run into an issue where a skills change should trigger a refresh but the count difference doesn't change,
         // we'll have to rework this
-        
+
         if (originalCount == newCount) {
             return;
         }
 
         var player = playerOption.orElse(event.getPlayer());
-
         playerMap.put(player, newCount);
+        Restrictions.INSTANCE.clearPlayerCache(player);
 
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.getLevel().getChunkSource().chunkMap.updatePlayerStatus(serverPlayer, true);

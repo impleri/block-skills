@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -27,11 +26,7 @@ public class BlockHelper {
     public static BlockState getBlockState(BlockPos blockPos, Level level) {
         return level.getBlockState(blockPos);
     }
-
-    public static Block getBlock(BlockPos blockPos, Level level) {
-        return getBlockState(blockPos, level).getBlock();
-    }
-
+    
     public static Block getBlock(BlockState blockState) {
         return blockState.getBlock();
     }
@@ -43,15 +38,15 @@ public class BlockHelper {
     public static boolean isEmptyBlock(Block block) {
         var defaultBlock = Registry.BLOCK.get((ResourceLocation) null);
 
-        return block.equals(defaultBlock);
+        return block == null || defaultBlock.defaultBlockState().is(block);
     }
 
     public static boolean isBlock(BlockState blockState) {
         return blockState != null;
     }
 
-    public static boolean isSameBlock(BlockState a, BlockState b) {
-        return !isBlock(a) || !isBlock(b) || a.is(b.getBlock());
+    public static boolean isReplacedBlock(BlockState a, BlockState b) {
+        return isBlock(a) && isBlock(b) && !b.is(a.getBlock());
     }
 
     public static ResourceLocation getBlockName(Block block) {
@@ -62,88 +57,66 @@ public class BlockHelper {
         return getBlockName(getBlock(blockState));
     }
 
-    public static ResourceLocation getBlockName(BlockPos blockPos, Level level) {
-        return getBlockName(getBlock(blockPos, level));
-    }
+    public static BlockState getReplacement(Player player, BlockState original) {
+        var replacement = Restrictions.INSTANCE.getReplacement(player, original);
 
-    public static boolean isHarvestable(Player player, BlockState state, boolean original) {
-        var replacement = getReplacement(player, state);
-
-        if (isBlock(replacement)) {
-            return player.hasCorrectToolForDrops(replacement);
-        }
-
-        if (!Restrictions.INSTANCE.isDroppable(player, state)) {
-            return false;
-        }
-
-        return original;
-    }
-
-    public static Float getBreakSpeed(Player player, BlockState state, float original, @Nullable BlockPos pos) {
-        if (pos == null) {
-            return original;
-        }
-
-        var newSpeed = getBreakSpeed(player, state, player.getLevel(), pos);
-
-        return newSpeed == null ? original : newSpeed;
-    }
-
-    public static Float getBreakSpeed(Player player, BlockState state, BlockGetter blockGetter, BlockPos pos) {
-        var replacement = getReplacement(player, state);
-
-        if (isBlock(replacement)) {
-            return replacement.getDestroyProgress(player, blockGetter, pos);
-        }
-
-        if (!Restrictions.INSTANCE.isBreakable(player, state)) {
-            return -1.0F;
-        }
-
-        return null;
-    }
-
-    public static List<ItemStack> getDrops(Player player, BlockState state, ServerLevel serverLevel, BlockPos blockPos, @Nullable BlockEntity blockEntity, ItemStack tool) {
-        var replacement = getReplacement(player, state);
-
-        if (isBlock(replacement) && !isSameBlock(state, replacement)) {
-            var drops = Block.getDrops(replacement, serverLevel, blockPos, blockEntity, player, tool);
-            BlockSkills.LOGGER.debug("Drops for {} are: {}", getBlockName(state), drops);
-
-            return drops;
-        }
-
-        if (!Restrictions.INSTANCE.isDroppable(player, state)) {
-            BlockSkills.LOGGER.debug("Block {} is not droppable", getBlockName(state));
-            return new ArrayList<>();
-        }
-
-        return null;
-    }
-
-    @Nullable
-    public static BlockState getReplacement(Player player, BlockState blockState) {
-        var replacement = Restrictions.INSTANCE.getReplacement(player, blockState);
-
-        if (isBlock(replacement) && !isSameBlock(blockState, replacement)) {
-            BlockSkills.LOGGER.debug("Replacement for {} is {}", getBlockName(blockState), getBlockName(replacement));
+        if (isReplacedBlock(original, replacement)) {
+            BlockSkills.LOGGER.debug("Replacement for {} is {}", getBlockName(original), getBlockName(replacement));
         }
 
         return replacement;
     }
 
-    public static int getReplacementId(BlockState blockState) {
-        BlockState replacement = blockState;
+    public static int getReplacementId(BlockState original) {
+        BlockState replacement = original;
 
+        // Inject replacement block
         if (currentPlayer != null) {
-            var maybeReplacement = getReplacement(currentPlayer, blockState);
+            var maybeReplacement = getReplacement(currentPlayer, original);
 
-            if (isBlock(maybeReplacement)) {
+            if (isReplacedBlock(original, maybeReplacement)) {
                 replacement = maybeReplacement;
             }
         }
 
         return Block.BLOCK_STATE_REGISTRY.getId(replacement);
+    }
+
+    public static long getReplacementsCountFor(Player player) {
+        return Restrictions.INSTANCE.getReplacementsCountFor(player);
+    }
+
+    public static boolean isUsable(Player player, BlockState blockState) {
+        return Restrictions.INSTANCE.isUsable(player, blockState);
+    }
+
+    public static boolean isBreakable(Player player, BlockState blockState) {
+        return Restrictions.INSTANCE.isBreakable(player, blockState);
+    }
+
+    private static boolean checkHarvestable(Player player, BlockState blockState) {
+        return Restrictions.INSTANCE.isHarvestable(player, blockState) && isBreakable(player, blockState);
+    }
+
+    private static final List<ItemStack> EMPTY_DROPS = new ArrayList<>();
+
+    public static List<ItemStack> getDrops(Player player, BlockState original, ServerLevel serverLevel, BlockPos blockPos, @Nullable BlockEntity blockEntity, ItemStack tool) {
+        var replacement = getReplacement(player, original);
+
+        // Determine drops from replacement block
+        if (isReplacedBlock(original, replacement)) {
+            var drops = checkHarvestable(player, replacement) ? Block.getDrops(replacement, serverLevel, blockPos, blockEntity, player, tool) : EMPTY_DROPS;
+            BlockSkills.LOGGER.info("Drops for {} ({}) are: {}", getBlockName(original), getBlockName(replacement), drops);
+
+            return drops;
+        }
+
+        // Maybe prevent drops
+        if (!checkHarvestable(player, original)) {
+            BlockSkills.LOGGER.info("Block {} is not droppable", getBlockName(original));
+            return EMPTY_DROPS;
+        }
+
+        return null;
     }
 }

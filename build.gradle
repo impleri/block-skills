@@ -13,6 +13,16 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
+        launches {
+            client {
+                property "fabric.log.level", "debug"
+                property "forge.log.level", "debug"
+            }
+            server {
+                property "fabric.log.level", "debug"
+                property "forge.log.level", "debug"
+            }
+        }
     }
 
     dependencies {

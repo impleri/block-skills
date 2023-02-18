@@ -21,7 +21,7 @@ public class MixinClientboundSectionBlocksUpdatePacket implements InterceptedCli
             // TODO: get player
             var newState = BlockHelper.getReplacement(player, states[i]);
 
-            if (newState != null && !newState.equals(states[i])) {
+            if (BlockHelper.isReplacedBlock(states[i], newState)) {
                 states[i] = newState;
             }
         }

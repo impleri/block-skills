@@ -21,7 +21,7 @@ public class MixinClientboundBlockUpdatePacket implements InterceptedClientbound
     public void interceptRestrictions(ServerPlayer player) {
         var newState = BlockHelper.getReplacement(player, blockState);
 
-        if (newState != null && !newState.equals(blockState)) {
+        if (BlockHelper.isReplacedBlock(blockState, newState)) {
             blockState = newState;
         }
     }

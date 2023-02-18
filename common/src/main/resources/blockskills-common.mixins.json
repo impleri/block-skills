@@ -5,13 +5,17 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinBlock",
+    "MixinBlockStateBase",
+    "MixinPlayer",
     "MixinServerPlayer",
+    "MixinServerPlayerGameMode",
     "chunk.MixinChunkMap",
     "chunk.MixinHashMapPalette",
     "chunk.MixinLinearPalette",
     "chunk.MixinSingleValuePalette",
     "network.MixinClientboundBlockUpdatePacket",
-    "network.MixinClientboundSectionBlocksUpdatePacket"
+    "network.MixinClientboundSectionBlocksUpdatePacket",
+    "network.MixinServerGamePacketListenerImpl"
   ],
   "client": [],
   "server": [],

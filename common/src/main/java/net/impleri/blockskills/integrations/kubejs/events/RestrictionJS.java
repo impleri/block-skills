@@ -27,7 +27,7 @@ public class RestrictionJS extends Restriction {
                 state,
                 builder.condition,
                 builder.breakable,
-                builder.droppable,
+                builder.harvestable,
                 builder.usable,
                 builder.replacement
         );
@@ -35,7 +35,7 @@ public class RestrictionJS extends Restriction {
 
     public static class Builder extends AbstractRestrictionBuilder<Restriction> {
         public boolean breakable = true;
-        public boolean droppable = true;
+        public boolean harvestable = true;
         public boolean usable = true;
         public BlockState replacement;
 
@@ -58,6 +58,12 @@ public class RestrictionJS extends Restriction {
             return this;
         }
 
+        public Builder replaceWithAir() {
+            this.replacement = BlockHelper.getBlock((ResourceLocation) null).defaultBlockState();
+
+            return this;
+        }
+
         public Builder breakable() {
             this.breakable = true;
 
@@ -70,14 +76,14 @@ public class RestrictionJS extends Restriction {
             return this;
         }
 
-        public Builder droppable() {
-            this.droppable = true;
+        public Builder harvestable() {
+            this.harvestable = true;
 
             return this;
         }
 
-        public Builder undroppable() {
-            this.droppable = false;
+        public Builder unharvestable() {
+            this.harvestable = false;
 
             return this;
         }
@@ -96,7 +102,7 @@ public class RestrictionJS extends Restriction {
 
         public Builder nothing() {
             breakable = true;
-            droppable = true;
+            harvestable = true;
             usable = true;
 
             return this;
@@ -104,7 +110,7 @@ public class RestrictionJS extends Restriction {
 
         public Builder everything() {
             breakable = false;
-            droppable = false;
+            harvestable = false;
             usable = false;
 
             return this;
