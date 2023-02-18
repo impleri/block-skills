@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "blockskills",
+  "version": "${version}",
+  "name": "Block Skills",
+  "description": "A library mod that exposes KubeJS methods to restrict how players see and interact with blocks.",
+  "authors": [
+    "impleri"
+  ],
+  "contact": {
+    "homepage": "https://github.com/impleri/block-skills",
+    "sources": "https://github.com/impleri/block-skills",
+    "issues": "https://github.com/impleri/block-skills/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/blockskills/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.impleri.blockskills.fabric.BlockSkillsFabric"
+    ]
+  },
+  "mixins": [
+    "blockskills-common.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.19.2",
+    "architectury": ">=6.2.43",
+    "playerskills": ">=1.0.0"
+  }
+}
