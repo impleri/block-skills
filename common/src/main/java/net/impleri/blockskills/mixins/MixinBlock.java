@@ -26,7 +26,7 @@ public class MixinBlock {
         if (entity instanceof ServerPlayer player && !currentValue.isEmpty()) {
             var newDrops = BlockHelper.getDrops(player, blockState, serverLevel, blockPos, blockEntity, tool);
             if (newDrops != null) {
-                BlockSkills.LOGGER.info("Replacing block drops for {} from {} to {}", BlockHelper.getBlockName(blockState), currentValue, newDrops);
+                BlockSkills.LOGGER.debug("Replacing block drops for {} from {} to {}", BlockHelper.getBlockName(blockState), currentValue, newDrops);
                 cir.setReturnValue(newDrops);
             }
         }

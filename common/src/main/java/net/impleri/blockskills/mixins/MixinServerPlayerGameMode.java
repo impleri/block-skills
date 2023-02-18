@@ -19,7 +19,7 @@ public class MixinServerPlayerGameMode {
 
     private BlockState replaceBlock(BlockState original, String logAction) {
         var replacement = BlockHelper.getReplacement(player, original);
-        BlockSkills.LOGGER.info("Network: {} block {} (replaced by {}).", logAction, BlockHelper.getBlockName(original), BlockHelper.getBlockName(replacement));
+        BlockSkills.LOGGER.debug("Network: {} block {} (replaced by {}).", logAction, BlockHelper.getBlockName(original), BlockHelper.getBlockName(replacement));
 
         return replacement;
     }
@@ -29,12 +29,12 @@ public class MixinServerPlayerGameMode {
         return replaceBlock(original, "breaking");
     }
 
-    @ModifyVariable(method = "destroyBlock", at = @At("STORE"))
+    @ModifyVariable(method = "destroyBlock", at = @At("LOAD"))
     public BlockState onDestroyBlock(BlockState original) {
         return replaceBlock(original, "destroying");
     }
 
-    @ModifyVariable(method = "useItemOn", at = @At("STORE"))
+    @ModifyVariable(method = "useItemOn", at = @At("LOAD"))
     public BlockState onUseItemOn(BlockState original) {
         return replaceBlock(original, "right clicking");
     }

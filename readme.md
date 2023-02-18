@@ -68,18 +68,19 @@ ItemSkillEvents.register(event => {
 });
 ```
 
+### Caveat
+
+Because of how events are fired, KubeJS `BlockEvents.rightClicked` events will only be triggered with the _original_
+block. Make sure that you reuse the same `player.can()` or `player.cannot()` restrictions on any skill change handlers.
+For example, if you are hiding `minecraft:diamond_ore` as `minecraft:stone` but are also triggering a skill change when
+a player uses redstone on diamond_ore, right clicking on the hidden diamond ore with redstone in hand will still trigger
+the skill update if it's not restricted with the same conditions that the hidden block is using.
+
 ## Modpacks
 
 Want to use this in a modpack? Great! This was designed with modpack developers in mind. No need to ask.
 
 ## TODO
 
-- Breaking block drop nothing on breaking
-- See replacement blocks
-- Interact with replacement blocks
-- Jade/TOP/WTHIT
-    - https://github.com/Snownee/Jade/blob/1.19.1-forge/src/main/java/snownee/jade/api/IWailaClientRegistration.java#L124
-    - https://github.com/McJtyMods/TheOneProbe/blob/1.16/src/main/java/mcjty/theoneprobe/api/IProbeConfigProvider.java
-    - https://docs.bai.lol/wthit/plugin/disabling_tooltip/
 - Implement tag matching
 - Implement mod id matching

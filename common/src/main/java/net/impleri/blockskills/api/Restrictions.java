@@ -85,19 +85,19 @@ public class Restrictions extends RestrictionsApi<BlockState, Restriction> {
 
     public boolean isBreakable(Player player, BlockState block) {
         var actualBlock = getReplacement(player, block);
-        BlockSkills.LOGGER.info("Checking if {} ({}) is breakable.", BlockHelper.getBlockName(block), BlockHelper.getBlockName(actualBlock));
+        BlockSkills.LOGGER.debug("Checking if {} ({}) is breakable.", BlockHelper.getBlockName(block), BlockHelper.getBlockName(actualBlock));
         return canPlayer(player, actualBlock, "breakable");
     }
 
     public boolean isHarvestable(Player player, BlockState block) {
         var actualBlock = getReplacement(player, block);
-        BlockSkills.LOGGER.info("Checking if {} ({}) is harvestable.", BlockHelper.getBlockName(block), BlockHelper.getBlockName(actualBlock));
+        BlockSkills.LOGGER.debug("Checking if {} ({}) is harvestable.", BlockHelper.getBlockName(block), BlockHelper.getBlockName(actualBlock));
         return canPlayer(player, actualBlock, "harvestable");
     }
 
     public boolean isUsable(Player player, BlockState block) {
         var actualBlock = getReplacement(player, block);
-        BlockSkills.LOGGER.info("Checking if {} ({}) is usable.", BlockHelper.getBlockName(block), BlockHelper.getBlockName(actualBlock));
+        BlockSkills.LOGGER.debug("Checking if {} ({}) is usable.", BlockHelper.getBlockName(block), BlockHelper.getBlockName(actualBlock));
         return canPlayer(player, actualBlock, "usable");
     }
 

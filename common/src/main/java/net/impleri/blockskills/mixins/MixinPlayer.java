@@ -19,7 +19,7 @@ public abstract class MixinPlayer {
     public void onHasCorrectToolForDrops(BlockState blockState, CallbackInfoReturnable<Boolean> cir) {
         var replacement = BlockHelper.getReplacement((Player) (Object) this, blockState);
         if (BlockHelper.isReplacedBlock(blockState, replacement)) {
-            BlockSkills.LOGGER.info("Replacing {} with {} for harvest check.", BlockHelper.getBlockName(blockState), BlockHelper.getBlockName(replacement));
+            BlockSkills.LOGGER.debug("Replacing {} with {} for harvest check.", BlockHelper.getBlockName(blockState), BlockHelper.getBlockName(replacement));
             cir.setReturnValue(this.hasCorrectToolForDrops(replacement));
         }
     }

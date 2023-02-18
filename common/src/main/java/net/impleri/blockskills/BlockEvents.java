@@ -23,31 +23,29 @@ public class BlockEvents {
     }
 
     private EventResult beforeMineBlock(Player player, InteractionHand hand, BlockPos pos, Direction face) {
-        BlockSkills.LOGGER.info("Call to arch:leftClickBlock");
         var block = BlockHelper.getBlockState(pos, player.getLevel());
         var blockName = BlockHelper.getBlockName(block);
 
         if (!BlockHelper.isBreakable(player, block)) {
-            BlockSkills.LOGGER.info("{} cannot break {}", player.getName().getString(), blockName);
+            BlockSkills.LOGGER.debug("{} cannot break {}", player.getName().getString(), blockName);
             return EventResult.interruptFalse();
         }
 
-        BlockSkills.LOGGER.info("{} is about to mine block {}", player.getName().getString(), blockName);
+        BlockSkills.LOGGER.debug("{} is about to mine block {}", player.getName().getString(), blockName);
 
         return EventResult.pass();
     }
 
     private EventResult beforeUseItemBlock(Player player, InteractionHand hand, BlockPos pos, Direction face) {
-        BlockSkills.LOGGER.info("Call to arch:rightClickBlock");
         var block = BlockHelper.getBlockState(pos, player.getLevel());
         var blockName = BlockHelper.getBlockName(block);
 
         if (!BlockHelper.isUsable(player, block)) {
-            BlockSkills.LOGGER.info("{} cannot interact with block {}", player.getName().getString(), blockName);
+            BlockSkills.LOGGER.debug("{} cannot interact with block {}", player.getName().getString(), blockName);
             return EventResult.interruptFalse();
         }
 
-        BlockSkills.LOGGER.info("{} is about to interact with block {}", player.getName().getString(), blockName);
+        BlockSkills.LOGGER.debug("{} is about to interact with block {}", player.getName().getString(), blockName);
         return EventResult.pass();
     }
 

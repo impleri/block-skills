@@ -26,7 +26,7 @@ public class BlockHelper {
     public static BlockState getBlockState(BlockPos blockPos, Level level) {
         return level.getBlockState(blockPos);
     }
-    
+
     public static Block getBlock(BlockState blockState) {
         return blockState.getBlock();
     }
@@ -106,14 +106,14 @@ public class BlockHelper {
         // Determine drops from replacement block
         if (isReplacedBlock(original, replacement)) {
             var drops = checkHarvestable(player, replacement) ? Block.getDrops(replacement, serverLevel, blockPos, blockEntity, player, tool) : EMPTY_DROPS;
-            BlockSkills.LOGGER.info("Drops for {} ({}) are: {}", getBlockName(original), getBlockName(replacement), drops);
+            BlockSkills.LOGGER.debug("Drops for {} ({}) are: {}", getBlockName(original), getBlockName(replacement), drops);
 
             return drops;
         }
 
         // Maybe prevent drops
         if (!checkHarvestable(player, original)) {
-            BlockSkills.LOGGER.info("Block {} is not droppable", getBlockName(original));
+            BlockSkills.LOGGER.debug("Block {} is not droppable", getBlockName(original));
             return EMPTY_DROPS;
         }
 

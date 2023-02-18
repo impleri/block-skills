@@ -25,7 +25,7 @@ public abstract class MixinBlockStateBase {
         var actualBlock = BlockHelper.getReplacement(player, asState());
 
         if (BlockHelper.isReplacedBlock(asState(), actualBlock)) {
-            BlockSkills.LOGGER.info("Replacing {} with {} for right click.", BlockHelper.getBlockName(asState()), BlockHelper.getBlockName(actualBlock));
+            BlockSkills.LOGGER.debug("Replacing {} with {} for right click.", BlockHelper.getBlockName(asState()), BlockHelper.getBlockName(actualBlock));
             cir.setReturnValue(actualBlock.use(level, player, interactionHand, blockHitResult));
         }
     }
