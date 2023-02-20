@@ -12,4 +12,8 @@ public class BlockSkills {
         LOGGER.info("Loaded Block Skills");
         INSTANCE.registerEventHandlers();
     }
+
+    public static void enableDebug() {
+        LOGGER.enableDebug();
+    }
 }
