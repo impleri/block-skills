@@ -83,7 +83,7 @@ public class BlockHelper {
     }
 
     public static long getReplacementsCountFor(Player player) {
-        return Restrictions.INSTANCE.getReplacementsCountFor(player);
+        return Restrictions.INSTANCE.countReplacementsFor(player);
     }
 
     public static boolean isUsable(Player player, BlockState blockState) {
