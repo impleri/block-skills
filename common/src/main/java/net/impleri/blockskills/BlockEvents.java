@@ -2,11 +2,14 @@ package net.impleri.blockskills;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
+import dev.architectury.platform.Platform;
 import net.impleri.blockskills.api.Restrictions;
 import net.impleri.playerskills.server.events.SkillChangedEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -15,11 +18,21 @@ import java.util.HashMap;
 
 public class BlockEvents {
     public void registerEventHandlers() {
-        InteractionEvent.LEFT_CLICK_BLOCK.register(this::beforeMineBlock);
-        InteractionEvent.RIGHT_CLICK_BLOCK.register(this::beforeUseItemBlock);
+        LifecycleEvent.SERVER_STARTING.register(this::onStartup);
+
         PlayerEvent.PLAYER_JOIN.register(this::onJoin);
         PlayerEvent.PLAYER_QUIT.register(this::onQuit);
+
+        InteractionEvent.LEFT_CLICK_BLOCK.register(this::beforeMineBlock);
+        InteractionEvent.RIGHT_CLICK_BLOCK.register(this::beforeUseItemBlock);
+        
         SkillChangedEvent.EVENT.register(this::onSkillChanged);
+    }
+
+    private void onStartup(MinecraftServer minecraftServer) {
+        if (Platform.isModLoaded("kubejs")) {
+            net.impleri.blockskills.integrations.kubejs.BlockSkillsPlugin.onStartup();
+        }
     }
 
     private EventResult beforeMineBlock(Player player, InteractionHand hand, BlockPos pos, Direction face) {
