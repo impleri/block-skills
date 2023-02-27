@@ -11,13 +11,8 @@ public class BlockSkillsPlugin extends KubeJSPlugin {
         EventsBinding.GROUP.register();
     }
 
-    @Override
-    public void initStartup() {
+    public static void onStartup() {
         Registry.INSTANCE.clear();
-        loadRestrictions();
-    }
-
-    private void loadRestrictions() {
         EventsBinding.RESTRICTIONS.post(new RestrictionsRegistrationEventJS());
     }
 }

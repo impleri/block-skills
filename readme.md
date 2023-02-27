@@ -46,16 +46,20 @@ meets that condition. By default, no restrictions are set, so be sure to set act
 ### Examples
 
 ```js
-  // Coal ore blocks cannot be mined and won't drop anything if player is at stage 1 or below
 BlockSkillEvents.register(event => {
+  // Vanilla MC blocks won't drop anything if player is at stage 1 or below
+  event.restrict(
+    'minecraft:*',
+    r => r.unharvestable().if(player => player.cannot('skills:stage', 2))
+  );
+
+  // Coal ore blocks cannot be mined and won't drop anything if player is at stage 1 or below
   event.restrict(
     'minecraft:coal_ore',
     r => r.everything().if(player => player.cannot('skills:stage', 2))
   );
-});
 
-// Iron ore blocks will look and act like stone
-ItemSkillEvents.register(event => {
+  // Iron ore blocks will look and act like stone
   event.restrict(
     'minecraft:iron_ore',
     r => r.replaceWithBlock('minecraft:stone').unless(player => player.can('skills:stage', 2))
