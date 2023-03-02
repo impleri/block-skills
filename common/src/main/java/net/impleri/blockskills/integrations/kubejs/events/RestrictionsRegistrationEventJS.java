@@ -5,23 +5,21 @@ import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.impleri.blockskills.BlockHelper;
 import net.impleri.blockskills.restrictions.Registry;
-import net.impleri.playerskills.utils.SkillResourceLocation;
+import net.impleri.playerskills.utils.RegistrationType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
 public class RestrictionsRegistrationEventJS extends EventJS {
-    public void restrict(String name, @NotNull Consumer<RestrictionJS.Builder> consumer) {
-        if (name.trim().endsWith(":*")) {
-            var namespace = name.substring(0, name.indexOf(":"));
+    public void restrict(String blockName, @NotNull Consumer<RestrictionJS.Builder> consumer) {
+        RegistrationType<Block> registrationType = new RegistrationType<Block>(blockName, net.minecraft.core.Registry.BLOCK_REGISTRY);
 
-            restrictNamespace(namespace, consumer);
-            return;
-        }
-
-        var blockName = SkillResourceLocation.of(name);
-        restrictBlock(blockName, consumer);
+        registrationType.ifNamespace(namespace -> restrictNamespace(namespace, consumer));
+        registrationType.ifName(name -> restrictBlock(name, consumer));
+        registrationType.ifTag(tag -> restrictTag(tag, consumer));
     }
 
     @HideFromJS
@@ -43,9 +41,18 @@ public class RestrictionsRegistrationEventJS extends EventJS {
 
     @HideFromJS
     private void restrictNamespace(String namespace, @NotNull Consumer<RestrictionJS.Builder> consumer) {
+        ConsoleJS.SERVER.info("Creating block restrictions for namespace " + namespace);
         net.minecraft.core.Registry.BLOCK.keySet()
                 .stream()
                 .filter(blockName -> blockName.getNamespace().equals(namespace))
                 .forEach(blockName -> restrictBlock(blockName, consumer));
+    }
+
+    @HideFromJS
+    private void restrictTag(TagKey<Block> tag, @NotNull Consumer<RestrictionJS.Builder> consumer) {
+        ConsoleJS.SERVER.info("Creating block restrictions for tag " + tag.location());
+        net.minecraft.core.Registry.BLOCK.stream()
+                .filter(block -> block.defaultBlockState().is(tag))
+                .forEach(block -> restrictBlock(BlockHelper.getBlockName(block), consumer));
     }
 }
