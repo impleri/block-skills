@@ -53,6 +53,16 @@ BlockSkillEvents.register(event => {
     r => r.unharvestable().if(player => player.cannot('skills:stage', 2))
   );
 
+  // Vanilla MC blocks are unbreakable
+  event.restrict("@minecraft", (is) => {
+    is.unbreakable();
+  });
+
+  // Every block tagged as a log is unbreakable
+  event.restrict("#logs", (is) => {
+    is.unbreakable();
+  });
+
   // Coal ore blocks cannot be mined and won't drop anything if player is at stage 1 or below
   event.restrict(
     'minecraft:coal_ore',
