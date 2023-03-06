@@ -10,23 +10,7 @@ on:
       - unlabeled
 jobs:
   add_label:
-    name: 'Add PR Label'
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.opened == true
-    steps:
-      - uses: actions-ecosystem/action-add-labels@v1
-        with:
-          labels: patch
+    uses: impleri/automatic-skills/add-label.yml
 
   check_labels:
-    name: 'Check PR Labels'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: mheap/github-action-required-labels@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          mode: exactly
-          count: 1
-          labels: 'major, minor, patch'
+    uses: impleri/automatic-skills/check-labels.yml
