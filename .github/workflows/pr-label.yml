@@ -4,10 +4,20 @@ on:
     branches:
       - main
     types:
+      - opened
       - reopened
       - labeled
       - unlabeled
 jobs:
+  add_label:
+    name: 'Add PR Label'
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.opened == true
+    steps:
+      - uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: patch
+
   check_labels:
     name: 'Check PR Labels'
     runs-on: ubuntu-latest
