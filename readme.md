@@ -85,6 +85,32 @@ For example, if you are hiding `minecraft:diamond_ore` as `minecraft:stone` but 
 a player uses redstone on diamond_ore, right clicking on the hidden diamond ore with redstone in hand will still trigger
 the skill update if it's not restricted with the same conditions that the hidden block is using.
 
+## Developers
+
+Add the following to your `build.gradle`. I depend
+on [Architectury API](https://github.com/architectury/architectury-api), [KubeJS](https://github.com/KubeJS-Mods/KubeJS),
+and [PlayerSkills](https://github.com/impleri/player-skills), so you'll need those as well.
+
+```groovy
+dependencies {
+    // Common should always be included 
+    modImplementation "net.impleri:block-skills-${minecraft_version}:${blockskills_version}"
+    // Plus forge
+    modApi "net.impleri:block-skills-${minecraft_version}-forge:${blockskills_version}"
+    // Or fabric
+    modApi "net.impleri:block-skills-${minecraft_version}-fabric:${blockskills_version}"
+}
+repositories {
+    maven {
+        url = "https://maven.impleri.org/minecraft"
+        name = "Impleri Mods"
+        content {
+            includeGroup "net.impleri"
+        }
+    }
+}
+```
+
 ## Modpacks
 
 Want to use this in a modpack? Great! This was designed with modpack developers in mind. No need to ask.
