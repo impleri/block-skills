@@ -12,9 +12,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-
     steps:
-      - uses: impleri/automatic-skills/build.yml
+      - uses: impleri/automatic-skills/build.yml@main
 
   bump:
     name: Version Bump
@@ -25,7 +24,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: impleri/automatic-skills/version-bump.yml
+      - uses: impleri/automatic-skills/version-bump.yml@main
 
   publish:
     name: Publish to Maven
@@ -33,7 +32,7 @@ jobs:
     needs: bump
 
     steps:
-      - uses: impleri/automatic-skills/publish.yml
+      - uses: impleri/automatic-skills/publish.yml@main
         with:
           maven-user: ${{ secrets.MAVEN_USER }}
           maven-password: ${{ secrets.MAVEN_TOKEN }}

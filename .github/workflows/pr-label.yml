@@ -10,7 +10,7 @@ on:
       - unlabeled
 jobs:
   add_label:
-    uses: impleri/automatic-skills/add-label.yml
+    uses: impleri/automatic-skills/add-label.yml@main
 
   check_labels:
-    uses: impleri/automatic-skills/check-labels.yml
+    uses: impleri/automatic-skills/check-labels.yml@main
