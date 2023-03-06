@@ -12,31 +12,24 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    steps:
-      - uses: impleri/automatic-skills/.github/workflows/build.yml@main
+    uses: impleri/automatic-skills/.github/workflows/build.yml@main
 
   bump:
     name: Version Bump
     runs-on: ubuntu-latest
     needs: build
     if: github.event.pull_request.merged == true
-    permissions:
-      contents: write
-
-    steps:
-      - uses: impleri/automatic-skills/.github/workflows/version-bump.yml@main
+    uses: impleri/automatic-skills/.github/workflows/version-bump.yml@main
 
   publish:
     name: Publish to Maven
     runs-on: ubuntu-latest
     needs: bump
-
-    steps:
-      - uses: impleri/automatic-skills/.github/workflows/publish.yml@main
-        with:
-          maven-user: ${{ secrets.MAVEN_USER }}
-          maven-password: ${{ secrets.MAVEN_TOKEN }}
-          modrinth-id: ${{ secrets.MODRINTH_ID }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-id: ${{ secrets.CURSEFORGE_ID }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+    uses: impleri/automatic-skills/.github/workflows/publish.yml@main
+    with:
+      maven-user: ${{ secrets.MAVEN_USER }}
+      maven-password: ${{ secrets.MAVEN_TOKEN }}
+      modrinth-id: ${{ secrets.MODRINTH_ID }}
+      modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+      curseforge-id: ${{ secrets.CURSEFORGE_ID }}
+      curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
