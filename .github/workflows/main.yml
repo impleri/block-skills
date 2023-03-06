@@ -24,7 +24,7 @@ jobs:
     needs: bump
     permissions:
       contents: write
-    with:
+    secrets:
       maven-user: ${{ secrets.MAVEN_USER }}
       maven-password: ${{ secrets.MAVEN_TOKEN }}
       modrinth-id: ${{ secrets.MODRINTH_ID }}
