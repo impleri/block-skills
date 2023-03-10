@@ -1,7 +1,7 @@
 package net.impleri.blockskills.api;
 
 import net.impleri.blockskills.BlockHelper;
-import net.impleri.blockskills.restrictions.Registry;
+import net.impleri.blockskills.BlockSkills;
 import net.impleri.blockskills.restrictions.Restriction;
 import net.impleri.playerskills.api.RestrictionsApi;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 public class Restrictions extends RestrictionsApi<BlockState, Restriction> {
     private static final Field[] allRestrictionFields = Restriction.class.getDeclaredFields();
-    public static Restrictions INSTANCE = new Restrictions(Registry.INSTANCE, allRestrictionFields);
+    public static Restrictions INSTANCE = new Restrictions(BlockSkills.RESTRICTIONS, allRestrictionFields);
 
     public Restrictions(net.impleri.playerskills.restrictions.Registry<Restriction> registry, Field[] fields) {
         super(registry, fields);

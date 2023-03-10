@@ -5,7 +5,6 @@ import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.platform.Platform;
-import net.impleri.blockskills.api.Restrictions;
 import net.impleri.playerskills.server.events.SkillChangedEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +24,7 @@ public class BlockEvents {
 
         InteractionEvent.LEFT_CLICK_BLOCK.register(this::beforeMineBlock);
         InteractionEvent.RIGHT_CLICK_BLOCK.register(this::beforeUseItemBlock);
-        
+
         SkillChangedEvent.EVENT.register(this::onSkillChanged);
     }
 
@@ -73,6 +72,7 @@ public class BlockEvents {
     }
 
     private void onSkillChanged(SkillChangedEvent<?> event) {
+        // get the ServerPlayer we should have from the initial filling of the cache
         var eventPlayerId = event.getPlayer().getUUID();
         var playerOption = playerMap.keySet().stream().filter(player1 -> eventPlayerId.equals(player1.getUUID())).findFirst();
 
@@ -90,7 +90,6 @@ public class BlockEvents {
 
         var player = playerOption.orElse(event.getPlayer());
         playerMap.put(player, newCount);
-        Restrictions.INSTANCE.clearPlayerCache(player);
 
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.getLevel().getChunkSource().chunkMap.updatePlayerStatus(serverPlayer, true);
