@@ -33,7 +33,7 @@ jobs:
 
   release:
     uses: impleri/automatic-skills/.github/workflows/github-release.yml@main
-    if: startsWith(github.event.push.ref, 'ref/tags/')
+    if: ${{ github.ref_type == 'tag' }}
     needs: build
     permissions:
       contents: write
