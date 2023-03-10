@@ -76,3 +76,14 @@ publishing {
         }
     }
 }
+
+unifiedPublishing {
+    project {
+        relations {
+            depends {
+                curseforge = "fabric-api"
+                modrinth = "fabric-api"
+            }
+        }
+    }
+}
