@@ -25,8 +25,8 @@
   ],
   "depends": {
     "fabric": "*",
-    "minecraft": "1.19.2",
-    "architectury": ">=6.2.43",
-    "playerskills": ">=1.6.0"
+    "minecraft": "1.18.2",
+    "architectury": ">=4.11",
+    "playerskills": ">=0.1"
   }
 }

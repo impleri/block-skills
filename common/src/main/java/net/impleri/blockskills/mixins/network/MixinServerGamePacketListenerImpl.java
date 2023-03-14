@@ -1,8 +1,9 @@
 package net.impleri.blockskills.mixins.network;
 
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import net.impleri.blockskills.BlockSkills;
 import net.impleri.blockskills.api.InterceptedClientboundPacket;
-import net.minecraft.network.PacketSendListener;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,8 +19,8 @@ public abstract class MixinServerGamePacketListenerImpl {
     @Shadow
     public ServerPlayer player;
 
-    @Inject(method = "send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;)V", at = @At("HEAD"))
-    public void onSend(Packet<?> packet, PacketSendListener packetSendListener, CallbackInfo ci) {
+    @Inject(method = "send(Lnet/minecraft/network/protocol/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"))
+    public void onSend(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> genericFutureListener, CallbackInfo ci) {
         if (packet instanceof InterceptedClientboundPacket restrictedPacket) {
             BlockSkills.LOGGER.debug("Intercepting {} update packet", restrictedPacket instanceof ClientboundBlockUpdatePacket ? "block" : "section");
             restrictedPacket.interceptRestrictions(player);
