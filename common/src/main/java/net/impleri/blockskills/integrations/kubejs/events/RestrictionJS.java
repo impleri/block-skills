@@ -10,6 +10,7 @@ import net.impleri.playerskills.utils.SkillResourceLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class RestrictionJS extends Restriction {
@@ -24,6 +25,10 @@ public class RestrictionJS extends Restriction {
                 builder.breakable,
                 builder.harvestable,
                 builder.usable,
+                builder.includeDimensions,
+                builder.excludeDimensions,
+                builder.includeBiomes,
+                builder.excludeBiomes,
                 builder.replacement
         );
     }
@@ -35,8 +40,8 @@ public class RestrictionJS extends Restriction {
         public BlockState replacement;
 
         @HideFromJS
-        public Builder(ResourceLocation id) {
-            super(id);
+        public Builder(ResourceLocation id, MinecraftServer server) {
+            super(id, server);
         }
 
         public Builder replaceWithBlock(String replacement) {
