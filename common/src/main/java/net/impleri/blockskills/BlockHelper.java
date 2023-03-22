@@ -1,6 +1,6 @@
 package net.impleri.blockskills;
 
-import net.impleri.blockskills.api.Restrictions;
+import net.impleri.blockskills.restrictions.Restrictions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -57,8 +57,9 @@ public class BlockHelper {
         return getBlockName(getBlock(blockState));
     }
 
-    public static BlockState getReplacement(Player player, BlockState original) {
-        var replacement = Restrictions.INSTANCE.getReplacement(player, original);
+    public static BlockState getReplacement(Player player, BlockState original, BlockPos pos) {
+        var level = player.getLevel();
+        var replacement = Restrictions.INSTANCE.getReplacementFor(player, original, level.dimension().location(), level.getBiome(pos).unwrapKey().orElseThrow().location());
 
         if (isReplacedBlock(original, replacement)) {
             BlockSkills.LOGGER.debug("Replacement for {} is {}", getBlockName(original), getBlockName(replacement));
@@ -67,12 +68,15 @@ public class BlockHelper {
         return replacement;
     }
 
-    public static int getReplacementId(BlockState original) {
+    public static int getReplacementId(BlockState original, @Nullable BlockPos pos) {
         BlockState replacement = original;
 
         // Inject replacement block
         if (currentPlayer != null) {
-            var maybeReplacement = getReplacement(currentPlayer, original);
+            // Slightly hacky here but we don't know the blockPos when this method is called in Palettes so we're assuming the player's current location for biome matches
+            var actualPos = pos == null ? currentPlayer.blockPosition() : pos;
+
+            var maybeReplacement = getReplacement(currentPlayer, original, actualPos);
 
             if (isReplacedBlock(original, maybeReplacement)) {
                 replacement = maybeReplacement;
@@ -86,33 +90,33 @@ public class BlockHelper {
         return Restrictions.INSTANCE.countReplacementsFor(player);
     }
 
-    public static boolean isUsable(Player player, BlockState blockState) {
-        return Restrictions.INSTANCE.isUsable(player, blockState);
+    public static boolean isUsable(Player player, BlockState blockState, BlockPos pos) {
+        return Restrictions.INSTANCE.isUsable(player, blockState, pos);
     }
 
-    public static boolean isBreakable(Player player, BlockState blockState) {
-        return Restrictions.INSTANCE.isBreakable(player, blockState);
+    public static boolean isBreakable(Player player, BlockState blockState, BlockPos pos) {
+        return Restrictions.INSTANCE.isBreakable(player, blockState, pos);
     }
 
-    private static boolean checkHarvestable(Player player, BlockState blockState) {
-        return Restrictions.INSTANCE.isHarvestable(player, blockState) && isBreakable(player, blockState);
+    private static boolean checkHarvestable(Player player, BlockState blockState, BlockPos pos) {
+        return Restrictions.INSTANCE.isHarvestable(player, blockState, pos) && isBreakable(player, blockState, pos);
     }
 
     private static final List<ItemStack> EMPTY_DROPS = new ArrayList<>();
 
     public static List<ItemStack> getDrops(Player player, BlockState original, ServerLevel serverLevel, BlockPos blockPos, @Nullable BlockEntity blockEntity, ItemStack tool) {
-        var replacement = getReplacement(player, original);
+        var replacement = getReplacement(player, original, blockPos);
 
         // Determine drops from replacement block
         if (isReplacedBlock(original, replacement)) {
-            var drops = checkHarvestable(player, replacement) ? Block.getDrops(replacement, serverLevel, blockPos, blockEntity, player, tool) : EMPTY_DROPS;
+            var drops = checkHarvestable(player, replacement, blockPos) ? Block.getDrops(replacement, serverLevel, blockPos, blockEntity, player, tool) : EMPTY_DROPS;
             BlockSkills.LOGGER.debug("Drops for {} ({}) are: {}", getBlockName(original), getBlockName(replacement), drops);
 
             return drops;
         }
 
         // Maybe prevent drops
-        if (!checkHarvestable(player, original)) {
+        if (!checkHarvestable(player, original, blockPos)) {
             BlockSkills.LOGGER.debug("Block {} is not droppable", getBlockName(original));
             return EMPTY_DROPS;
         }

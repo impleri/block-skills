@@ -1,19 +1,24 @@
 package net.impleri.blockskills.integrations.kubejs.events;
 
-import dev.latvian.mods.kubejs.event.EventJS;
+import dev.latvian.mods.kubejs.server.ServerEventJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.impleri.blockskills.BlockHelper;
 import net.impleri.blockskills.BlockSkills;
 import net.impleri.playerskills.utils.RegistrationType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class RestrictionsRegistrationEventJS extends EventJS {
+public class RestrictionsRegistrationEventJS extends ServerEventJS {
+    public RestrictionsRegistrationEventJS(MinecraftServer s) {
+        super(s);
+    }
+
     public void restrict(String blockName, @NotNull Consumer<RestrictionJS.Builder> consumer) {
         RegistrationType<Block> registrationType = new RegistrationType<Block>(blockName, net.minecraft.core.Registry.BLOCK_REGISTRY);
 
@@ -24,7 +29,7 @@ public class RestrictionsRegistrationEventJS extends EventJS {
 
     @HideFromJS
     public void restrictBlock(ResourceLocation name, @NotNull Consumer<RestrictionJS.Builder> consumer) {
-        var builder = new RestrictionJS.Builder(name);
+        var builder = new RestrictionJS.Builder(name, server);
 
         consumer.accept(builder);
 

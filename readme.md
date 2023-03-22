@@ -114,8 +114,3 @@ repositories {
 ## Modpacks
 
 Want to use this in a modpack? Great! This was designed with modpack developers in mind. No need to ask.
-
-## TODO
-
-- Implement tag matching
-- Implement mod id matching

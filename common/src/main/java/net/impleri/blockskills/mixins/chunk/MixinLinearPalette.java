@@ -1,7 +1,6 @@
 package net.impleri.blockskills.mixins.chunk;
 
 import net.impleri.blockskills.BlockHelper;
-import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LinearPalette;
@@ -16,9 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinLinearPalette<T> {
     @Shadow
     @Final
-    private IdMap<T> registry;
-    @Shadow
-    @Final
     private T[] values;
     @Shadow
     private int size;
@@ -29,7 +25,7 @@ public abstract class MixinLinearPalette<T> {
             arg.writeVarInt(this.size);
 
             for (int i = 0; i < this.size; ++i) {
-                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values[i]));
+                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values[i], null));
             }
 
             ci.cancel();

@@ -1,7 +1,6 @@
 package net.impleri.blockskills.mixins.chunk;
 
 import net.impleri.blockskills.BlockHelper;
-import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.CrudeIncrementalIntIdentityHashBiMap;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,9 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 abstract public class MixinHashMapPalette<T> {
     @Shadow
     @Final
-    private IdMap<T> registry;
-    @Shadow
-    @Final
     private CrudeIncrementalIntIdentityHashBiMap<T> values;
 
     @Shadow
@@ -32,7 +28,7 @@ abstract public class MixinHashMapPalette<T> {
             arg.writeVarInt(i);
 
             for (int j = 0; j < i; ++j) {
-                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values.byId(j)));
+                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values.byId(j), null));
             }
 
             ci.cancel();
