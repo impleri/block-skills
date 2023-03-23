@@ -27,7 +27,7 @@ public class MixinSingleValuePalette<T> {
     @Inject(method = "write", at = @At("HEAD"), cancellable = true)
     public void onWrite(FriendlyByteBuf arg, CallbackInfo ci) {
         if (this.value != null && this.value instanceof BlockState) {
-            arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.value));
+            arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.value, null));
 
             ci.cancel();
         }

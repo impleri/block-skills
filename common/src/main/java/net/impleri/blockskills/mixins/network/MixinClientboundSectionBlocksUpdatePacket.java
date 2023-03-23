@@ -2,6 +2,8 @@ package net.impleri.blockskills.mixins.network;
 
 import net.impleri.blockskills.BlockHelper;
 import net.impleri.blockskills.api.InterceptedClientboundPacket;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.protocol.game.ClientboundSectionBlocksUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,11 +17,21 @@ public class MixinClientboundSectionBlocksUpdatePacket implements InterceptedCli
     @Final
     private BlockState[] states;
 
+    @Shadow
+    @Final
+    private SectionPos sectionPos;
+
+    @Shadow
+    @Final
+    private short[] positions;
+
+
     @Override
     public void interceptRestrictions(ServerPlayer player) {
         for (int i = 0; i < states.length; i++) {
-            // TODO: get player
-            var newState = BlockHelper.getReplacement(player, states[i]);
+            var posOffset = positions[i];
+            var blockPos = new BlockPos(sectionPos.relativeToBlockX(posOffset), sectionPos.relativeToBlockY(posOffset), sectionPos.relativeToBlockZ(posOffset));
+            var newState = BlockHelper.getReplacement(player, states[i], blockPos);
 
             if (BlockHelper.isReplacedBlock(states[i], newState)) {
                 states[i] = newState;

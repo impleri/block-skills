@@ -32,7 +32,7 @@ abstract public class MixinHashMapPalette<T> {
             arg.writeVarInt(i);
 
             for (int j = 0; j < i; ++j) {
-                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values.byId(j)));
+                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values.byId(j), null));
             }
 
             ci.cancel();

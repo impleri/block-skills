@@ -1,11 +1,13 @@
 package net.impleri.blockskills.restrictions;
 
 import net.impleri.playerskills.restrictions.AbstractRestriction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class Restriction extends AbstractRestriction<BlockState> {
@@ -19,45 +21,16 @@ public class Restriction extends AbstractRestriction<BlockState> {
             @Nullable Boolean breakable,
             @Nullable Boolean harvestable,
             @Nullable Boolean usable,
+            @Nullable List<ResourceLocation> includeDimensions,
+            @Nullable List<ResourceLocation> excludeDimensions,
+            @Nullable List<ResourceLocation> includeBiomes,
+            @Nullable List<ResourceLocation> excludeBiomes,
             @NotNull BlockState replacement
     ) {
-        super(target, condition, replacement);
+        super(target, condition, includeDimensions, excludeDimensions, includeBiomes, excludeBiomes, replacement);
+
         this.breakable = Boolean.TRUE.equals(breakable);
         this.harvestable = Boolean.TRUE.equals(harvestable);
         this.usable = Boolean.TRUE.equals(usable);
-    }
-
-    public Restriction(
-            BlockState block,
-            @Nullable Predicate<Player> condition,
-            @Nullable Boolean breakable,
-            @Nullable Boolean harvestable,
-            @NotNull BlockState replacement
-    ) {
-        this(block, condition, breakable, harvestable, null, replacement);
-    }
-
-    public Restriction(
-            BlockState block,
-            @Nullable Predicate<Player> condition,
-            @Nullable Boolean breakable,
-            @NotNull BlockState replacement
-    ) {
-        this(block, condition, breakable, null, replacement);
-    }
-
-    public Restriction(
-            BlockState block,
-            @Nullable Predicate<Player> condition,
-            @NotNull BlockState replacement
-    ) {
-        this(block, condition, null, replacement);
-    }
-
-    public Restriction(
-            BlockState block,
-            @NotNull BlockState replacement
-    ) {
-        this(block, null, replacement);
     }
 }

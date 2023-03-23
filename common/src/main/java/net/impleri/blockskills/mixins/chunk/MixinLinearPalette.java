@@ -29,7 +29,7 @@ public abstract class MixinLinearPalette<T> {
             arg.writeVarInt(this.size);
 
             for (int i = 0; i < this.size; ++i) {
-                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values[i]));
+                arg.writeVarInt(BlockHelper.getReplacementId((BlockState) this.values[i], null));
             }
 
             ci.cancel();

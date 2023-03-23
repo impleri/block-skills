@@ -17,7 +17,7 @@ public abstract class MixinPlayer {
 
     @Inject(method = "hasCorrectToolForDrops", at = @At("HEAD"), cancellable = true)
     public void onHasCorrectToolForDrops(BlockState blockState, CallbackInfoReturnable<Boolean> cir) {
-        var replacement = BlockHelper.getReplacement((Player) (Object) this, blockState);
+        var replacement = BlockHelper.getReplacement((Player) (Object) this, blockState, ((Player) (Object) this).blockPosition());
         if (BlockHelper.isReplacedBlock(blockState, replacement)) {
             BlockSkills.LOGGER.debug("Replacing {} with {} for harvest check.", BlockHelper.getBlockName(blockState), BlockHelper.getBlockName(replacement));
             cir.setReturnValue(this.hasCorrectToolForDrops(replacement));
