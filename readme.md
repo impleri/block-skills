@@ -15,13 +15,14 @@ criteria, the player can finally break the bed as well.
 
 ### Register
 
-We use the `BlockSkillEvents.register` ***startup*** event to register block restrictions. Registration requires a
-replacement (`replaceWith` or `replaceWithState`). Optionally, a test (`if` or `unless`) can be supplied as a callback
-function which uses a player skills condition object (`can` and `cannot` methods). If the player ***matches*** the
-criteria, the following restrictions are applied. This can cascade with other restrictions, so any restrictions which
-replaces a block will trump any which only add restrictions to the block. Also, any restrictions which deny the ability
-will trump any which allow it. We also expose these methods to indicate what restrictions are in place for when a player
-meets that condition. By default, no restrictions are set, so be sure to set actual restrictions.
+We use the `blockSkills.register` event to register block restrictions. If the player ***matches*** the criteria, the
+following restrictions are applied. This can cascade with other restrictions, so any restrictions which replaces a block
+will trump any which only add restrictions to the block. Also, any restrictions which deny the ability will trump any
+which allow it. We also expose these methods to indicate what restrictions are in place for when a player meets that
+condition. By default, no restrictions are set, so be sure to set actual restrictions.
+
+As an extension to PlayerSkills, all
+the [common restriction facets](https://github.com/impleri/player-skills#kubejs-restrictions-api) are usable here.
 
 #### Replacement methods
 
@@ -46,7 +47,7 @@ meets that condition. By default, no restrictions are set, so be sure to set act
 ### Examples
 
 ```js
-BlockSkillEvents.register(event => {
+onEvent('blockSkills.register', (event) => {
   // Vanilla MC blocks won't drop anything if player is at stage 1 or below
   event.restrict(
     'minecraft:*',
@@ -79,11 +80,12 @@ BlockSkillEvents.register(event => {
 
 ### Caveat
 
-Because of how events are fired, KubeJS `BlockEvents.rightClicked` events will only be triggered with the _original_
-block. Make sure that you reuse the same `player.can()` or `player.cannot()` restrictions on any skill change handlers.
-For example, if you are hiding `minecraft:diamond_ore` as `minecraft:stone` but are also triggering a skill change when
-a player uses redstone on diamond_ore, right clicking on the hidden diamond ore with redstone in hand will still trigger
-the skill update if it's not restricted with the same conditions that the hidden block is using.
+Because of how events are fired, KubeJS `block.right_click` events will only be triggered with the _original_
+block. Make sure that you reuse the same `player.can()` or `player.cannot()` restrictions on any skill change handlers
+related to the block. For example, if you are hiding `minecraft:diamond_ore` as `minecraft:stone` but are also
+triggering a skill change when a player uses redstone on diamond_ore, right clicking on the hidden diamond ore with
+redstone in hand will still trigger the skill update if it's not restricted with the same conditions that the hidden
+block is using.
 
 ## Developers
 
@@ -114,8 +116,3 @@ repositories {
 ## Modpacks
 
 Want to use this in a modpack? Great! This was designed with modpack developers in mind. No need to ask.
-
-## TODO
-
-- Implement tag matching
-- Implement mod id matching

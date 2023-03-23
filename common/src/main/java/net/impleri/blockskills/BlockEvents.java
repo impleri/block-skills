@@ -30,7 +30,7 @@ public class BlockEvents {
 
     private void onStartup(MinecraftServer minecraftServer) {
         if (Platform.isModLoaded("kubejs")) {
-            net.impleri.blockskills.integrations.kubejs.BlockSkillsPlugin.onStartup();
+            net.impleri.blockskills.integrations.kubejs.BlockSkillsPlugin.onStartup(minecraftServer);
         }
     }
 
@@ -38,7 +38,7 @@ public class BlockEvents {
         var block = BlockHelper.getBlockState(pos, player.getLevel());
         var blockName = BlockHelper.getBlockName(block);
 
-        if (!BlockHelper.isBreakable(player, block)) {
+        if (!BlockHelper.isBreakable(player, block, pos)) {
             BlockSkills.LOGGER.debug("{} cannot break {}", player.getName().getString(), blockName);
             return EventResult.interruptFalse();
         }
@@ -52,7 +52,7 @@ public class BlockEvents {
         var block = BlockHelper.getBlockState(pos, player.getLevel());
         var blockName = BlockHelper.getBlockName(block);
 
-        if (!BlockHelper.isUsable(player, block)) {
+        if (!BlockHelper.isUsable(player, block, pos)) {
             BlockSkills.LOGGER.debug("{} cannot interact with block {}", player.getName().getString(), blockName);
             return EventResult.interruptFalse();
         }

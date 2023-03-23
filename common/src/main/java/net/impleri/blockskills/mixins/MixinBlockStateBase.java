@@ -22,7 +22,7 @@ public abstract class MixinBlockStateBase {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void onUse(Level level, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        var actualBlock = BlockHelper.getReplacement(player, asState());
+        var actualBlock = BlockHelper.getReplacement(player, asState(), blockHitResult.getBlockPos());
 
         if (BlockHelper.isReplacedBlock(asState(), actualBlock)) {
             BlockSkills.LOGGER.debug("Replacing {} with {} for right click.", BlockHelper.getBlockName(asState()), BlockHelper.getBlockName(actualBlock));
