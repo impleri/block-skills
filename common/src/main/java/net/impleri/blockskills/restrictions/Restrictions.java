@@ -2,6 +2,7 @@ package net.impleri.blockskills.restrictions;
 
 import net.impleri.blockskills.BlockHelper;
 import net.impleri.blockskills.BlockSkills;
+import net.impleri.playerskills.restrictions.Registry;
 import net.impleri.playerskills.restrictions.RestrictionsApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +16,7 @@ public class Restrictions extends RestrictionsApi<BlockState, Restriction> {
     private static final Field[] allRestrictionFields = Restriction.class.getDeclaredFields();
     public static Restrictions INSTANCE = new Restrictions(BlockSkills.RESTRICTIONS, allRestrictionFields);
 
-    public Restrictions(net.impleri.playerskills.restrictions.Registry<Restriction> registry, Field[] fields) {
+    public Restrictions(Registry<Restriction> registry, Field[] fields) {
         super(registry, fields);
     }
 
