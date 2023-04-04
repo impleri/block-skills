@@ -39,11 +39,19 @@ public class BlockHelper {
     public static boolean isEmptyBlock(Block block) {
         var defaultBlock = Registry.BLOCK.get((ResourceLocation) null);
 
-        return block == null || defaultBlock.defaultBlockState().is(block);
+        return !isBlock(block) || defaultBlock.defaultBlockState().is(block);
+    }
+
+    public static boolean isBlock(Block block) {
+        return block != null;
     }
 
     public static boolean isBlock(BlockState blockState) {
         return blockState != null;
+    }
+
+    public static boolean isReplacedBlock(BlockState a, Block b) {
+        return isBlock(a) && isBlock(b) && !a.is(b);
     }
 
     public static boolean isReplacedBlock(BlockState a, BlockState b) {
@@ -75,13 +83,13 @@ public class BlockHelper {
         }
 
         var level = player.getLevel();
-        var replacement = Restrictions.INSTANCE.getReplacementFor(player, original, level.dimension().location(), level.getBiome(pos).unwrapKey().orElseThrow().location());
+        var replacement = Restrictions.INSTANCE.getReplacementFor(player, original.getBlock(), level.dimension().location(), level.getBiome(pos).unwrapKey().orElseThrow().location());
 
         if (isReplacedBlock(original, replacement)) {
             BlockSkills.LOGGER.debug("Replacement for {} is {}", getBlockName(original), getBlockName(replacement));
         }
 
-        return replacement;
+        return replacement.defaultBlockState();
     }
 
     public static int getReplacementId(BlockState original, @Nullable BlockPos pos) {
