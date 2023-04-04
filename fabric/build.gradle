@@ -25,6 +25,7 @@ dependencies {
     modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
     modApi "dev.latvian.mods:kubejs-fabric:${rootProject.kubejs_version}"
     modImplementation "net.impleri:player-skills-${rootProject.minecraft_version}-fabric:${rootProject.playerskills_version}"
+    modImplementation "net.impleri:fluid-skills-${rootProject.minecraft_version}-fabric:${rootProject.fluidskills_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
