@@ -16,7 +16,7 @@ A library mod that exposes KubeJS methods to restrict how players see and intera
 [[dependencies.blockskills]]
 modId = "playerskills"
 mandatory = true
-versionRange = "[1.7,)"
+versionRange = "[1.7.2,)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -37,6 +37,13 @@ side = "BOTH"
 [[dependencies.blockskills]]
 modId = "architectury"
 mandatory = true
-versionRange = "[6.2.43,)"
+versionRange = "[6.2.0,)"
 ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.blockskills]]
+modId = "fluidskills"
+mandatory = false
+versionRange = "[1.0,)"
+ordering = "NONE"
 side = "BOTH"

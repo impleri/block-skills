@@ -62,6 +62,11 @@ subprojects {
                         curseforge = "kubejs"
                         modrinth = "kubejs"
                     }
+
+                    optional {
+                        curseforge = "fluid-skills"
+                        modrinth = "fluid-skills"
+                    }
                 }
 
                 var curseId = System.getenv("CURSEFORGE_ID")
