@@ -1,5 +1,6 @@
 package net.impleri.blockskills;
 
+import dev.architectury.platform.Platform;
 import net.impleri.blockskills.restrictions.Restrictions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -57,7 +58,22 @@ public class BlockHelper {
         return getBlockName(getBlock(blockState));
     }
 
+    @Nullable
+    private static BlockState getFluidBlockReplacement(Player player, BlockState original, BlockPos pos) {
+        if (Platform.isModLoaded("fluidskills")) {
+            return net.impleri.fluidskills.FluidSkills.maybeReplaceFluidBlock(player, original, pos);
+        }
+
+        return null;
+    }
+
     public static BlockState getReplacement(Player player, BlockState original, BlockPos pos) {
+        var fluidReplacement = getFluidBlockReplacement(player, original, pos);
+
+        if (fluidReplacement != null) {
+            return fluidReplacement;
+        }
+
         var level = player.getLevel();
         var replacement = Restrictions.INSTANCE.getReplacementFor(player, original, level.dimension().location(), level.getBiome(pos).unwrapKey().orElseThrow().location());
 

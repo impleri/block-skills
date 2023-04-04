@@ -17,7 +17,7 @@ public class Restrictions extends RestrictionsApi<BlockState, Restriction> {
     public static Restrictions INSTANCE = new Restrictions(BlockSkills.RESTRICTIONS, allRestrictionFields);
 
     public Restrictions(Registry<Restriction> registry, Field[] fields) {
-        super(registry, fields);
+        super(registry, fields, BlockSkills.LOGGER);
     }
 
     @Override
