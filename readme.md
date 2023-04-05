@@ -5,6 +5,8 @@ A library mod that exposes KubeJS methods to restrict how players see and intera
 (Fabric). Note that this does not alter interactions based on what items the player is holding (use `Item Skills` for
 that).
 
+[![](https://dcbadge.vercel.app/api/server/avxJgbaUmG)](https://dcbadge.vercel.app/api/server/avxJgbaUmG)
+
 ## KubeJS API
 
 When creating restrictions, you have two avenues: `replace` the block with a different block or `modify` what a player
