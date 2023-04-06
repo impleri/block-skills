@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -91,6 +92,23 @@ public class BlockHelper {
 
         return replacement.defaultBlockState();
     }
+
+    // Used in mixins for detecting if the block should burn
+    public static BlockState getReplacement(BlockGetter instance, BlockPos blockPos) {
+        var original = instance.getBlockState(blockPos);
+
+        // If we have a level, we can find the nearest player and get a restriction
+        if (instance instanceof Level level) {
+            var player = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 128, false);
+
+            if (player != null) {
+                return getReplacement(player, original, blockPos);
+            }
+        }
+
+        return original;
+    }
+
 
     public static int getReplacementId(BlockState original, @Nullable BlockPos pos) {
         BlockState replacement = original;
