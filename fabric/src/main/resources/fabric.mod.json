@@ -21,7 +21,8 @@
     ]
   },
   "mixins": [
-    "blockskills-common.mixins.json"
+    "blockskills-common.mixins.json",
+    "blockskills.mixins.json"
   ],
   "depends": {
     "fabric": "*",
