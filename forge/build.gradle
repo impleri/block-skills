@@ -23,7 +23,8 @@ loom {
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfigs = [
-                "blockskills-common.mixins.json"
+                "blockskills-common.mixins.json",
+                "blockskills.mixins.json"
         ]
     }
 }
