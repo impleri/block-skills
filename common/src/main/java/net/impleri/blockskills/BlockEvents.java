@@ -1,11 +1,16 @@
 package net.impleri.blockskills;
 
+import com.mojang.brigadier.CommandDispatcher;
 import dev.architectury.event.EventResult;
+import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.platform.Platform;
+import net.impleri.playerskills.commands.PlayerSkillsCommands;
 import net.impleri.playerskills.server.events.SkillChangedEvent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.MinecraftServer;
@@ -26,6 +31,14 @@ public class BlockEvents {
         InteractionEvent.RIGHT_CLICK_BLOCK.register(this::beforeUseItemBlock);
 
         SkillChangedEvent.EVENT.register(this::onSkillChanged);
+    }
+
+    public void registerCommands() {
+        CommandRegistrationEvent.EVENT.register(this::registerDebugCommand);
+    }
+
+    private void registerDebugCommand(CommandDispatcher<CommandSourceStack> dispatcher, Commands.CommandSelection selection) {
+        PlayerSkillsCommands.registerDebug(dispatcher, "blockskills", PlayerSkillsCommands.toggleDebug("Block Skills", BlockSkills::toggleDebug));
     }
 
     private void onStartup(MinecraftServer minecraftServer) {

@@ -23,7 +23,8 @@ loom {
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfigs = [
-                "blockskills-common.mixins.json"
+                "blockskills-common.mixins.json",
+                "blockskills.mixins.json"
         ]
     }
 }
@@ -34,6 +35,7 @@ dependencies {
     modImplementation "dev.architectury:architectury-forge:${rootProject.architectury_version}"
     modImplementation "dev.latvian.mods:kubejs-forge:${rootProject.kubejs_version}"
     modImplementation "net.impleri:player-skills-${rootProject.minecraft_version}-forge:${rootProject.playerskills_version}"
+    modImplementation "net.impleri:fluid-skills-${rootProject.minecraft_version}-forge:${rootProject.fluidskills_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }

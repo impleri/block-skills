@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[40,)"
+loaderVersion = "[40,41)"
 issueTrackerURL = "https://github.com/impleri/block-skills/issues"
 license = "MIT"
 
@@ -16,14 +16,14 @@ A library mod that exposes KubeJS methods to restrict how players see and intera
 [[dependencies.blockskills]]
 modId = "playerskills"
 mandatory = true
-versionRange = "[1.0,)"
+versionRange = "[1.0.2,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.blockskills]]
 modId = "forge"
 mandatory = true
-versionRange = "[40,)"
+versionRange = "[40,41)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -37,6 +37,13 @@ side = "BOTH"
 [[dependencies.blockskills]]
 modId = "architectury"
 mandatory = true
-versionRange = "[4.11,)"
+versionRange = "[4.0,)"
 ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.blockskills]]
+modId = "fluidskills"
+mandatory = false
+versionRange = "[0.0,2.0)"
+ordering = "NONE"
 side = "BOTH"
