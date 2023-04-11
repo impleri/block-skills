@@ -11,16 +11,17 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class RestrictionJS extends Restriction {
     private static final ResourceKey<Registry<Restriction>> key = ResourceKey.createRegistryKey(SkillResourceLocation.of("block_restriction_builders_registry"));
 
     public static final RegistryObjectBuilderTypes<Restriction> registry = RegistryObjectBuilderTypes.add(key, Restriction.class);
 
-    public RestrictionJS(BlockState state, Builder builder) {
+    public RestrictionJS(Block block, Builder builder) {
         super(
-                state,
+                block,
                 builder.condition,
                 builder.breakable,
                 builder.harvestable,
@@ -37,7 +38,7 @@ public class RestrictionJS extends Restriction {
         public boolean breakable = true;
         public boolean harvestable = true;
         public boolean usable = true;
-        public BlockState replacement;
+        public Block replacement;
 
         @HideFromJS
         public Builder(ResourceLocation id, MinecraftServer server) {
@@ -53,13 +54,13 @@ public class RestrictionJS extends Restriction {
                 return this;
             }
 
-            this.replacement = block.defaultBlockState();
+            this.replacement = block;
 
             return this;
         }
 
         public Builder replaceWithAir() {
-            this.replacement = BlockHelper.getBlock((ResourceLocation) null).defaultBlockState();
+            this.replacement = Blocks.AIR;
 
             return this;
         }
@@ -129,8 +130,8 @@ public class RestrictionJS extends Restriction {
         }
 
         @HideFromJS
-        public Restriction createObject(BlockState state) {
-            return new RestrictionJS(state, this);
+        public Restriction createObject(Block block) {
+            return new RestrictionJS(block, this);
         }
     }
 }

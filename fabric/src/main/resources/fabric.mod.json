@@ -21,12 +21,16 @@
     ]
   },
   "mixins": [
-    "blockskills-common.mixins.json"
+    "blockskills-common.mixins.json",
+    "blockskills.mixins.json"
   ],
   "depends": {
     "fabric": "*",
     "minecraft": "1.18.2",
-    "architectury": ">=4.11",
-    "playerskills": ">=1.0"
+    "architectury": ">=4.0",
+    "playerskills": ">=1.0.2"
+  },
+  "recommends": {
+    "fluidskills": "*"
   }
 }

@@ -16,9 +16,14 @@ public class BlockSkills {
     public static void init() {
         LOGGER.info("Loaded Block Skills");
         INSTANCE.registerEventHandlers();
+        INSTANCE.registerCommands();
     }
 
     public static void enableDebug() {
         LOGGER.enableDebug();
+    }
+
+    public static boolean toggleDebug() {
+        return LOGGER.toggleDebug();
     }
 }

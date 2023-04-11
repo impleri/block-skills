@@ -1,5 +1,6 @@
 package net.impleri.blockskills;
 
+import dev.architectury.platform.Platform;
 import net.impleri.blockskills.restrictions.Restrictions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -7,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -45,6 +47,14 @@ public class BlockHelper {
         return blockState != null;
     }
 
+    public static boolean isBlock(Block block) {
+        return block != null;
+    }
+
+    public static boolean isReplacedBlock(BlockState a, Block b) {
+        return isBlock(a) && isBlock(b) && !a.is(b);
+    }
+
     public static boolean isReplacedBlock(BlockState a, BlockState b) {
         return isBlock(a) && isBlock(b) && !b.is(a.getBlock());
     }
@@ -57,17 +67,48 @@ public class BlockHelper {
         return getBlockName(getBlock(blockState));
     }
 
+    @Nullable
+    private static BlockState getFluidBlockReplacement(Player player, BlockState original, BlockPos pos) {
+        if (Platform.isModLoaded("fluidskills")) {
+            return net.impleri.fluidskills.FluidSkills.maybeReplaceFluidBlock(player, original, pos);
+        }
+
+        return null;
+    }
+
     public static BlockState getReplacement(Player player, BlockState original, BlockPos pos) {
+        var fluidReplacement = getFluidBlockReplacement(player, original, pos);
+
+        if (fluidReplacement != null) {
+            return fluidReplacement;
+        }
+        
         var level = player.getLevel();
         var dimension = level.dimension().location();
         var biome = level.getBiome(pos).unwrapKey().orElseThrow().location();
-        var replacement = Restrictions.INSTANCE.getReplacementFor(player, original, dimension, biome);
+        var replacement = Restrictions.INSTANCE.getReplacementFor(player, original.getBlock(), dimension, biome);
 
         if (isReplacedBlock(original, replacement)) {
             BlockSkills.LOGGER.debug("Replacement for {} is {}", getBlockName(original), getBlockName(replacement));
         }
 
-        return replacement;
+        return replacement.defaultBlockState();
+    }
+
+    // Used in mixins for detecting if the block should burn
+    public static BlockState getReplacement(BlockGetter instance, BlockPos blockPos) {
+        var original = instance.getBlockState(blockPos);
+
+        // If we have a level, we can find the nearest player and get a restriction
+        if (instance instanceof Level level) {
+            var player = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 128, false);
+
+            if (player != null) {
+                return getReplacement(player, original, blockPos);
+            }
+        }
+
+        return original;
     }
 
     public static int getReplacementId(BlockState original, @Nullable BlockPos pos) {
