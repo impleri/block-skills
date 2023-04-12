@@ -160,7 +160,7 @@ public class BlockHelper {
         var replacement = getReplacement(player, original, blockPos);
         var canHarvest = checkHarvestable(player, replacement, blockPos);
 
-        BlockSkills.LOGGER.info("Can {} harvest {} (as {})  right now? {}", player.getName().getString(), getBlockName(original), getBlockName(replacement), canHarvest);
+        BlockSkills.LOGGER.debug("Can {} harvest {} (as {})  right now? {}", player.getName().getString(), getBlockName(original), getBlockName(replacement), canHarvest);
 
         return canHarvest;
     }
