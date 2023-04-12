@@ -18,7 +18,10 @@
     "network.MixinClientboundSectionBlocksUpdatePacket",
     "network.MixinServerGamePacketListenerImpl"
   ],
-  "client": [],
+  "client": [
+    "MixinBlockStateBaseHarvestable",
+    "MixinItemStack"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

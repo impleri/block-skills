@@ -140,6 +140,31 @@ public class BlockHelper {
         return Restrictions.INSTANCE.isBreakable(player, blockState, pos);
     }
 
+    public static boolean isBreakable(BlockGetter instance, BlockPos blockPos) {
+        var original = instance.getBlockState(blockPos);
+
+        // If we have a level, we can find the nearest player and get a restriction
+        if (instance instanceof Level level) {
+            var player = level.getNearestPlayer(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 128, false);
+
+            if (player != null) {
+                var replacement = getReplacement(player, original, blockPos);
+                return Restrictions.INSTANCE.isBreakable(player, replacement, blockPos);
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isHarvestable(Player player, BlockState original, BlockPos blockPos) {
+        var replacement = getReplacement(player, original, blockPos);
+        var canHarvest = checkHarvestable(player, replacement, blockPos);
+
+        BlockSkills.LOGGER.info("Can {} harvest {} (as {})  right now? {}", player.getName().getString(), getBlockName(original), getBlockName(replacement), canHarvest);
+
+        return canHarvest;
+    }
+
     private static boolean checkHarvestable(Player player, BlockState blockState, BlockPos pos) {
         return Restrictions.INSTANCE.isHarvestable(player, blockState, pos) && isBreakable(player, blockState, pos);
     }
