@@ -28,7 +28,7 @@
     "fabric": "*",
     "minecraft": "1.19.2",
     "architectury": ">=6.2.0",
-    "playerskills": ">=1.7.2"
+    "playerskills": ">=1.8.0"
   },
   "recommends": {
     "fluidskills": ">=1.0"
