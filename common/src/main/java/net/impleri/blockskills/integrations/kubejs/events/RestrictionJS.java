@@ -5,7 +5,7 @@ import dev.latvian.mods.rhino.util.HideFromJS;
 import net.impleri.blockskills.BlockHelper;
 import net.impleri.blockskills.BlockSkills;
 import net.impleri.blockskills.restrictions.Restriction;
-import net.impleri.playerskills.restrictions.AbstractRestrictionBuilder;
+import net.impleri.playerskills.integration.kubejs.api.AbstractRestrictionBuilder;
 import net.impleri.playerskills.utils.SkillResourceLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
