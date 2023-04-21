@@ -88,9 +88,10 @@ public class BlockHelper {
 
         if (isReplacedBlock(original, replacement)) {
             BlockSkills.LOGGER.debug("Replacement for {} is {}", getBlockName(original), getBlockName(replacement));
+            return replacement.defaultBlockState();
         }
 
-        return replacement.defaultBlockState();
+        return original;
     }
 
     // Used in mixins for detecting if the block should burn
